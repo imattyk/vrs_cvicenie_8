@@ -17,57 +17,91 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "gpio.h"
-#include "tim.h"
-#include "display.h"
 
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+/* USER CODE BEGIN PFP */
 
-extern uint64_t disp_time;
+/* USER CODE END PFP */
 
-uint64_t saved_time;
-double num_to_display = 10;
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
 
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
+  /* System interrupt init*/
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
   SystemClock_Config();
 
-  MX_GPIO_Init();
+  /* USER CODE BEGIN SysInit */
 
-  setSegments();
-  setDigits();
+  /* USER CODE END SysInit */
 
-  LL_mDelay(2000);
+  /* Initialize all configured peripherals */
+  /* USER CODE BEGIN 2 */
 
-  resetDigits();
-  resetSegments();
+  /* USER CODE END 2 */
 
-  MX_TIM3_Init();
-
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(disp_time > (saved_time + 100))
-	  {
-		  displayNumber(num_to_display);
-	  	  num_to_display -= 0.10;
-	  	  saved_time = disp_time;
+    /* USER CODE END WHILE */
 
-	  	  if(num_to_display <= 0)
-	  	  {
-	  		  num_to_display = 100;
-	  	  }
-	  }
+    /* USER CODE BEGIN 3 */
   }
-
+  /* USER CODE END 3 */
 }
 
 /**
@@ -77,17 +111,15 @@ int main(void)
 void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
-
-  if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_0)
+  while(LL_FLASH_GetLatency()!= LL_FLASH_LATENCY_0)
   {
-  Error_Handler();  
   }
   LL_RCC_HSI_Enable();
 
    /* Wait till HSI is ready */
   while(LL_RCC_HSI_IsReady() != 1)
   {
-    
+
   }
   LL_RCC_HSI_SetCalibTrimming(16);
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
@@ -98,11 +130,9 @@ void SystemClock_Config(void)
    /* Wait till System clock is ready */
   while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
   {
-  
+
   }
   LL_Init1msTick(8000000);
-  LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
-  LL_SYSTICK_EnableIT();
   LL_SetSystemCoreClock(8000000);
 }
 
@@ -130,8 +160,8 @@ void Error_Handler(void)
   * @param  line: assert_param error line source number
   * @retval None
   */
-void assert_failed(char *file, uint32_t line)
-{ 
+void assert_failed(uint8_t *file, uint32_t line)
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

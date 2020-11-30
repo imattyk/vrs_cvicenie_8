@@ -19,6 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -36,7 +38,51 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+enum abeceda{
+	A = 0b1110111,
+	a = 0b1111101,
+	b = 0b0011111,
+	C = 0b1001110,
+	c = 0b0001101,
+	d = 0b0111101,
+	E = 0b1001111,
+	F = 0b1000111,
+	G = 0b1011110,
+	H = 0b0110111,
+	h = 0b0010111,
+	I = 0b0000110,
+	J = 0b0111100,
+	L = 0b0001110,
+	n = 0b0010101,
+	O = 0b1111110,
+	o = 0b0011101,
+	P = 0b1100111,
+	q = 0b1110011,
+	r = 0b0000101,
+	S = 0b1011011,
+	t = 0b0001111,
+	U = 0b0111110,
+	u = 0b0011100,
+	y = 0b0111011,
 
+	K = 0b1010111,
+	M = 0b1101010,
+	W = 0b0111111,
+	X = 0b1001001,
+	Z = 0b1101101,
+	V = 0b0101010,
+
+	num_1 = 0b0110000,
+	num_2 = 0b1101101,
+	num_3 = 0b1111001,
+	num_4 = 0b0010011,
+	num_5 = 0b1011011,
+	num_6 = 0b1011111,
+	num_7 = 0b1110000,
+	num_8 = 0b1111111,
+	num_9 = 0b1111011,
+	num_0 = 0b1111110,
+};
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -89,6 +135,8 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -98,7 +146,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  turnON_digit(0,0,0,1);
+	  write_character(num_2);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -137,7 +186,111 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void write_character(unsigned short ch)
+{
+static char bin[8];
+static char inverted_bin[8];
 
+	// write bin number into an array
+	for (int i = 0;i < 8; i++)
+	{
+		bin[i] = ch & 0x80 ? '1' : '0';
+		ch <<= 1;
+	}
+
+	// invert characters in bin array
+	for (int i = 0;i < 8; i++)
+	{
+		if (bin[i] == '1'){inverted_bin[i] = 0;}
+		else if (bin[i] == '0'){inverted_bin[i] = 1;}
+	}
+
+
+	if(inverted_bin[1] == 1){
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_1);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_1);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_0);
+		}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_0);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_8);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_5);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_11);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_11);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_3);
+	}
+	//--------------------------------------------------
+	if(inverted_bin[1] == 1){
+			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4);
+	}
+	if(inverted_bin[1] == 0){
+		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);
+	}
+
+	/*
+	 HAL_GPIO_WritePin(GPIOA, LL_GPIO_PIN_1, inverted_bin[1]);
+	 HAL_GPIO_WritePin(GPIOA, LL_GPIO_PIN_0, inverted_bin[2]);
+	 HAL_GPIO_WritePin(GPIOA, LL_GPIO_PIN_8, inverted_bin[3]);
+	 HAL_GPIO_WritePin(GPIOB, LL_GPIO_PIN_5, inverted_bin[4]);
+
+	 HAL_GPIO_WritePin(GPIOA, LL_GPIO_PIN_11, inverted_bin[5]);
+	 HAL_GPIO_WritePin(GPIOA, LL_GPIO_PIN_3, inverted_bin[6]);
+	 HAL_GPIO_WritePin(GPIOB, LL_GPIO_PIN_4, inverted_bin[7]);
+	 //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 0); // desatinna ciara
+	  */
+}
+
+void turnON_digit(int seg1,int seg2, int seg3, int seg4)
+{
+	if (seg1 == 1){
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
+	}else{
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
+	}
+	if (seg2 == 1){
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4);
+	}else{
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4);
+	}
+	if (seg3 == 1){
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_6);
+	}else{
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_6);
+	}
+	if (seg4 == 1){
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_7);
+	}else{
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_7);
+	}
+}
 /* USER CODE END 4 */
 
 /**

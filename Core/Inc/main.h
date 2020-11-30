@@ -36,6 +36,7 @@ extern "C" {
 #include "stm32f3xx_ll_utils.h"
 #include "stm32f3xx_ll_pwr.h"
 #include "stm32f3xx_ll_dma.h"
+#include "stm32f3xx_ll_tim.h"
 #include "stm32f3xx_ll_gpio.h"
 
 #if defined(USE_FULL_ASSERT)
@@ -66,7 +67,8 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void write_character(unsigned short ch);
+void turnON_digit(int seg1,int seg2, int seg3, int seg4);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

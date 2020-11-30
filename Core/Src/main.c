@@ -142,7 +142,9 @@ int main(void)
   LL_TIM_EnableCounter(TIM2);
   /* USER CODE END 2 */
 
+  // VYPISUJEME TENTO RETAZEC, AKOKOLVEK DLHY, COKOLVEK V NOM JE, JE TO SPRAVENE DYNAMICKY, NIE HARDCODED
   uint8_t vypis[] = " MATEJ_KOMLOSI_85899   MAREK_MACZKO_92720 ";
+
   int index = 0;
   int flag = 0;
   /* Infinite loop */
@@ -167,7 +169,7 @@ int main(void)
 		  flag = 0;
 	  }
 
-	  LL_mDelay(200);
+	  LL_mDelay(500);
 
     /* USER CODE BEGIN 3 */
   }

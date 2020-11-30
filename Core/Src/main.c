@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+uint8_t text_to_display[] = "____";
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -138,16 +138,37 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  LL_TIM_EnableIT_UPDATE(TIM2);
+  LL_TIM_EnableCounter(TIM2);
   /* USER CODE END 2 */
 
+  uint8_t vypis[] = " MATEJ_KOMLOSI_85899   MAREK_MACZKO_92720 ";
+  int index = 0;
+  int flag = 0;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
     /* USER CODE END WHILE */
-	  turnON_digit(0,0,0,1);
-	  write_character(num_2);
+
+	  strncpy(text_to_display, &vypis[index], 4);
+	  if(flag == 0){
+		  index++;
+	  }
+	  if(flag == 1){
+		  index--;
+	  }
+
+	  if(index == sizeof(vypis)-4){
+		  flag = 1;
+	  }
+	  if(index == 0){
+		  flag = 0;
+	  }
+
+	  LL_mDelay(200);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -213,45 +234,45 @@ static char inverted_bin[8];
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_1);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[2] == 1){
 			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_0);
 		}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[2] == 0){
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_0);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[3] == 1){
 			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
 	}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[3] == 0){
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_8);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[4] == 1){
 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5);
 	}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[4] == 0){
 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_5);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[5] == 1){
 			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_11);
 	}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[5] == 0){
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_11);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[6] == 1){
 			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3);
 	}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[6] == 0){
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_3);
 	}
 	//--------------------------------------------------
-	if(inverted_bin[1] == 1){
+	if(inverted_bin[7] == 1){
 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4);
 	}
-	if(inverted_bin[1] == 0){
+	if(inverted_bin[7] == 0){
 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);
 	}
 
@@ -286,10 +307,180 @@ void turnON_digit(int seg1,int seg2, int seg3, int seg4)
 		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_6);
 	}
 	if (seg4 == 1){
-		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_7);
+		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_2);
 	}else{
-		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_7);
+		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_2);
 	}
+}
+
+void write_4_chars(uint8_t text[]){
+
+	for(uint8_t i = 0; i<4; i++){
+		if(i == 0){
+			write_character(getCharNumber(text[i]));
+			turnON_digit(1,0,0,0);
+		}
+		if(i == 1){
+			write_character(getCharNumber(text[i]));
+			turnON_digit(0,1,0,0);
+		}
+		if(i == 2){
+			write_character(getCharNumber(text[i]));
+			turnON_digit(0,0,1,0);
+		}
+		if(i == 3){
+			write_character(getCharNumber(text[i]));
+			turnON_digit(0,0,0,1);
+		}
+		resetSegments();
+		resetDigits();
+	}
+}
+
+unsigned short getCharNumber(uint8_t single_char){
+
+	if(single_char == 'A'){
+	        return 0b1110111;
+	    }
+	if(single_char == 'a'){
+	        return 0b1111101;
+	    }
+	if(single_char == 'b'){
+	        return 0b0011111;
+	    }
+	if(single_char == 'C'){
+	        return 0b1001110;
+	    }
+	if(single_char == 'c'){
+	        return 0b0001101;
+	    }
+	if(single_char == 'd'){
+	        return 0b0111101;
+	    }
+	if(single_char == 'E'){
+	        return 0b1001111;
+	    }
+	if(single_char == 'F'){
+	        return 0b1000111;
+	    }
+	if(single_char == 'G'){
+	        return 0b1011110;
+	    }
+	if(single_char == 'H'){
+	        return 0b0110111;
+	    }
+	if(single_char == 'h'){
+	        return 0b0010111;
+	    }
+	if(single_char == 'I'){
+	        return 0b0000110;
+	    }
+	if(single_char == 'J'){
+	        return 0b0111100;
+	    }
+	if(single_char == 'L'){
+	        return 0b0001110;
+	    }
+	if(single_char == 'n'){
+	        return 0b0010101;
+	    }
+	if(single_char == 'O'){
+	        return 0b1111110;
+	    }
+	if(single_char == 'o'){
+	        return 0b0011101;
+	    }
+	if(single_char == 'P'){
+	        return 0b1100111;
+	    }
+	if(single_char == 'q'){
+	        return 0b1110011;
+	    }
+	if(single_char == 'r'){
+	        return 0b0000101;
+	    }
+	if(single_char == 'S'){
+	        return 0b1011011;
+	    }
+	if(single_char == 't'){
+	        return 0b0001111;
+	    }
+	if(single_char == 'U'){
+	        return 0b0111110;
+	    }
+	if(single_char == 'u'){
+	        return 0b0011100;
+	    }
+	if(single_char == 'y'){
+	        return 0b0111011;
+	    }
+	if(single_char == 'K'){
+	        return 0b1010111;
+	    }
+	if(single_char == 'M'){
+	        return 0b1101010;
+	    }
+	if(single_char == 'W'){
+	        return 0b0111111;
+	    }
+	if(single_char == 'X'){
+	        return 0b1001001;
+	    }
+	if(single_char == 'Z'){
+	        return 0b1101101;
+	    }
+	if(single_char == 'V'){
+	        return 0b0101010;
+	    }
+	if(single_char == '1'){
+	        return 0b0110000;
+	    }
+	if(single_char == '2'){
+	        return 0b1101101;
+	    }
+	if(single_char == '3'){
+	        return 0b1111001;
+	    }
+	if(single_char == '4'){
+	        return 0b0010011;
+	    }
+	if(single_char == '5'){
+	        return 0b1011011;
+	    }
+	if(single_char == '6'){
+	        return 0b1011111;
+	    }
+	if(single_char == '7'){
+	        return 0b1110000;
+	    }
+	if(single_char == '8'){
+	        return 0b1111111;
+	    }
+	if(single_char == '9'){
+	        return 0b1111011;
+	    }
+	if(single_char == '0'){
+	        return 0b1111110;
+	    }
+	if(single_char == '_'){
+	        return 0b0001000;
+	    }
+	if(single_char == ' '){
+		        return 0b0000000;
+		    }
+}
+
+void resetDigits(){
+	turnON_digit(0, 0, 0, 0);
+}
+void resetSegments(){
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_1);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_0);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_11);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4);
 }
 /* USER CODE END 4 */
 

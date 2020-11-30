@@ -69,6 +69,8 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 void write_character(unsigned short ch);
 void turnON_digit(int seg1,int seg2, int seg3, int seg4);
+void write_4_chars(uint8_t text[]);
+unsigned short getCharNumber(uint8_t single_char);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -85,7 +87,6 @@ void turnON_digit(int seg1,int seg2, int seg3, int seg4);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
